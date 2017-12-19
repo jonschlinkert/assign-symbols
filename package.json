@@ -20,7 +20,7 @@
     "test": "mocha"
   },
   "devDependencies": {
-    "mocha": "*"
+    "mocha": "^3.0.0"
   },
   "keywords": [
     "assign",
