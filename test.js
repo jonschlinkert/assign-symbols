@@ -1,72 +1,64 @@
 'use strict';
 
 require('mocha');
-var assert = require('assert');
-var assignSymbols = require('./');
+const assert = require('assert');
+const assign = require('./');
 
-describe('assign symbols', function () {
-  it('should return the first object when one argument is passed:', function () {
-    assert.deepEqual(assignSymbols({a: 'b'}), {a: 'b'});
+describe('assign symbols', () => {
+  it('should throw an error when invalid arguments are passed', () => {
+    assert.throws(() => assign(), /expected the first argument to be an object/);
   });
 
-  if (typeof Symbol !== 'undefined') {
-    it('should assign symbol properties from an object to the receiver', function () {
-      var a = {};
-      var b = {};
-      var key = Symbol('abc');
-      b[key] = 'xyz';
-      assignSymbols(a, b);
-      assert.equal(a[key], 'xyz');
-    });
+  it('should return the first object when no other args are passed', () => {
+    let foo = { a: 'b' };
+    assert(assign(foo) === foo);
+  });
 
-    it('should assign symbol properties from each object to the receiver', function () {
-      var target = {};
-      var a = {};
-      var aa = Symbol('aa');
-      a[aa] = 'aa';
+  it('should assign symbol properties from an object to the receiver', () => {
+    let a = {};
+    let b = {};
+    let key = Symbol('abc');
+    b[key] = 'xyz';
+    assign(a, b);
+    assert.equal(a[key], 'xyz');
+  });
 
-      var b = {};
-      var bb = Symbol('bb');
-      b[bb] = 'bb';
+  it('should assign symbol properties from each object to the receiver', () => {
+    let target = {};
+    let a = {};
+    let aa = Symbol('aa');
+    a[aa] = 'aa';
 
-      var c = {};
-      var cc = Symbol('cc');
-      c[cc] = 'cc';
+    let b = {};
+    let bb = Symbol('bb');
+    b[bb] = 'bb';
 
-      assignSymbols(target, a, b, c);
-      assert.equal(target[aa], 'aa');
-      assert.equal(target[bb], 'bb');
-      assert.equal(target[cc], 'cc');
-    });
+    let c = {};
+    let cc = Symbol('cc');
+    c[cc] = 'cc';
 
-    it('should not assign non-enumerable symbols', function () {
-      var a = {};
-      var key = Symbol('abc');
-      function App() {}
-      App.prototype[key] = 'xyz';
-      var app = new App();
-      assignSymbols(a, app);
-      assert.equal(typeof a[key], 'undefined');
-    });
+    assign(target, a, b, c);
+    assert.equal(target[aa], 'aa');
+    assert.equal(target[bb], 'bb');
+    assert.equal(target[cc], 'cc');
+  });
 
-    it('should return the receiver object', function () {
-      var a = {};
-      var b = {};
-      var key = Symbol('abc');
-      b[key] = 'xyz';
-      var res = assignSymbols(a, b);
-      assert.equal(res[key], 'xyz');
-    });
-  }
+  it('should not assign non-enumerable symbols', () => {
+    let a = {};
+    let key = Symbol('abc');
+    function App() {}
+    App.prototype[key] = 'xyz';
+    let app = new App();
+    assign(a, app);
+    assert.equal(typeof a[key], 'undefined');
+  });
 
-  it('should throw an error:', function (cb) {
-    try {
-      assignSymbols();
-      cb(new Error('expected an error'));
-    } catch (err) {
-      assert(err);
-      assert(err.message, 'expected the first argument to be a string');
-      cb();
-    }
+  it('should return the receiver object', () => {
+    let a = {};
+    let b = {};
+    let key = Symbol('abc');
+    b[key] = 'xyz';
+    let res = assign(a, b);
+    assert.equal(res[key], 'xyz');
   });
 });

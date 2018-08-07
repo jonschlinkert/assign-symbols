@@ -1,23 +1,20 @@
 'use strict';
 
-if (typeof Symbol !== 'undefined') {
-  var assignSymbols = require('./');
-  var obj = {};
+if (typeof Symbol === 'function') {
+  const assignSymbols = require('./');
+  let obj = {};
 
-  var one = {};
-  var symbolOne = Symbol('aaa');
+  let one = {};
+  let symbolOne = Symbol('aaa');
   one[symbolOne] = 'bbb';
 
-  var two = {};
-  var symbolTwo = Symbol('ccc');
+  let two = {};
+  let symbolTwo = Symbol('ccc');
   two[symbolTwo] = 'ddd';
 
   assignSymbols(obj, one, two);
-
-  console.log(obj[symbolOne]);
-  //=> 'bbb'
-  console.log(obj[symbolTwo]);
-  //=> 'ddd'
+  console.log(obj[symbolOne]); //=> 'bbb'
+  console.log(obj[symbolTwo]); //=> 'ddd'
 } else {
-  console.log('sorry, Symbol is not supported.');
+  console.log('Sorry, Symbol is not supported on ' + process.version + ' of node.js');
 }
