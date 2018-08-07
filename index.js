@@ -33,5 +33,5 @@ module.exports = (target, ...args) => {
 };
 
 function isObject(val) {
-  return typeof val === 'function' || toString.call(val) === '[object Object]';
+  return typeof val === 'function' || toString.call(val) === '[object Object]' || Array.isArray(val);
 }
